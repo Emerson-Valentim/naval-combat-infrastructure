@@ -1,20 +1,7 @@
 locals {
   default_env_vars = {
-    NODE_ENV   = var.env
-  }
-
-  consumer_env_vars = {
-    REDIS_HOST  = var.redis.worker.primary_endpoint_address
-    REDIS_PORT  = 6379
-    SOCKET_HOST = module.notification.domain
-    SOCKET_PORT = 443
-  }
-
-  worker_env_vars = {
-    REDIS_HOST  = var.redis.worker.primary_endpoint_address
-    REDIS_PORT  = 6379
-    SOCKET_HOST = module.notification.domain
-    SOCKET_PORT = 443
+    NODE_ENV        = var.env
+    MONGODB_ADDRESS = var.mongodb.host
   }
 
   notification_env_vars = {
@@ -31,13 +18,21 @@ resource "aws_ecs_cluster" "cluster" {
     value = "enabled"
   }
 
-  capacity_providers = [
-    "FARGATE",
-    "FARGATE_SPOT"
-  ]
-
   tags = {
     Environment = "${var.env}"
+  }
+}
+
+resource "aws_ecs_cluster_capacity_providers" "example" {
+  cluster_name = aws_ecs_cluster.cluster.name
+
+  capacity_providers = ["FARGATE",
+  "FARGATE_SPOT"]
+
+  default_capacity_provider_strategy {
+    base              = 1
+    weight            = 100
+    capacity_provider = "FARGATE"
   }
 }
 
@@ -53,41 +48,6 @@ module "api" {
   security_groups = [var.network.main-api-sg.id]
 
   env_vars = merge(local.default_env_vars)
-}
-
-
-module "consumer" {
-  source = "../../modules/consumer"
-
-  env        = var.env
-  region     = var.region
-  service    = var.service
-  subnet_ids = var.network.main-vpc.private_subnets
-
-  security_groups = [var.network.main-consumer-sg.id]
-
-  cluster = aws_ecs_cluster.cluster
-
-  env_vars = merge(local.default_env_vars, local.consumer_env_vars)
-
-  ecr_url = var.ecr.repository_url
-}
-
-module "worker" {
-  source = "../../modules/worker"
-
-  env        = var.env
-  region     = var.region
-  service    = var.service
-  subnet_ids = var.network.main-vpc.private_subnets
-
-  security_groups = [var.network.main-worker-sg.id]
-
-  cluster = aws_ecs_cluster.cluster
-
-  env_vars = merge(local.default_env_vars, local.worker_env_vars)
-
-  ecr_url = var.ecr.repository_url
 }
 
 module "notification" {

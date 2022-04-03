@@ -26,7 +26,7 @@ module "api-gateway" {
   dns    = module.dns
 }
 
-module "service-1" {
+module "naval-combat" {
   source  = "./naval-combat"
   service = "naval-combat"
 
@@ -37,5 +37,6 @@ module "service-1" {
   network = module.network
   ecr     = module.storage.main-ecr
   redis   = module.storage.redis
+  mongodb = module.storage.mongodb
   dns     = module.dns
 }

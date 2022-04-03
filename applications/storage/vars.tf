@@ -14,3 +14,8 @@ variable "subnets" {
   type    = any
   default = {}
 }
+
+variable "region" {
+  type    = string
+  default = "sa-east-1"
+}
