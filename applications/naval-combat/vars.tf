@@ -32,6 +32,12 @@ variable "redis" {
   default = {}
 }
 
+
+variable "mongodb" {
+  type    = any
+  default = {}
+}
+
 variable "dns" {
   type    = any
   default = {}

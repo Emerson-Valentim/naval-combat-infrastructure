@@ -4,7 +4,12 @@ output "main-ecr" {
 
 output "redis" {
   value = {
-    worker = aws_elasticache_replication_group.worker-redis
     socket = aws_elasticache_replication_group.socket-redis
+  }
+}
+
+output "mongodb" {
+  value = {
+    host = mongodbatlas_cluster.cluster-test.connection_strings[0].standard
   }
 }
