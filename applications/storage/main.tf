@@ -40,13 +40,13 @@ resource "aws_elasticache_replication_group" "socket-redis" {
   apply_immediately          = true
 }
 
-resource "mongodbatlas_project" "test" {
+resource "mongodbatlas_project" "main" {
   name             = "main-${var.env}"
   org_id           = "6071c090caec8b594be61bc4"
 }
 
-resource "mongodbatlas_cluster" "cluster-test" {
-  project_id = "1"
+resource "mongodbatlas_cluster" "cluster-main" {
+  project_id = mongodbatlas_project.main.id
   name       = "main-${var.env}"
 
   # Provider Settings "block"
