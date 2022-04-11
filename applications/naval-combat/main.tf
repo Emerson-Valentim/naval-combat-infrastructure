@@ -1,6 +1,6 @@
 locals {
   default_env_vars = {
-    NODE_ENV        = var.env
+    APP_ENV        = var.env
     MONGODB_ADDRESS = var.mongodb.host
   }
 

@@ -16,8 +16,8 @@
         "name" : "notification",
         "volumesFrom" : [],
         "command" : [
-          "yarn",
-          "start:notification"
+          "node",
+          "build/start.js"
         ],
         "portMappings" : [
           {
