@@ -1,7 +1,13 @@
 locals {
   default_env_vars = {
-    APP_ENV        = var.env
-    MONGODB_ADDRESS = var.mongodb.host
+    APP_ENV          = var.env
+    MONGODB_ADDRESS  = var.mongodb.host
+    MONGODB_USERNAME = var.mongodb.username
+    MONGODB_PASSWORD = var.mongodb.password
+  }
+
+  api_env_vars = {
+    SOCKET_HOST = module.notification.domain
   }
 
   notification_env_vars = {
@@ -47,7 +53,7 @@ module "api" {
 
   security_groups = [var.network.main-api-sg.id]
 
-  env_vars = merge(local.default_env_vars)
+  env_vars = merge(local.default_env_vars, local.api_env_vars)
 }
 
 module "notification" {
