@@ -40,7 +40,9 @@ resource "aws_lambda_function" "api_lambda" {
   role          = aws_iam_role.iam_for_lambda.arn
   handler       = "build/start.handle"
 
-  runtime = "nodejs14.x"
+  runtime     = "nodejs14.x"
+  timeout     = 120
+  memory_size = 512
 
   vpc_config {
     subnet_ids         = var.subnet_ids
