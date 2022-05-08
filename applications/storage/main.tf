@@ -41,11 +41,11 @@ resource "aws_elasticache_replication_group" "socket-redis" {
 }
 
 resource "mongodbatlas_project" "main" {
-  name             = "main-${var.env}"
-  org_id           = "6071c090caec8b594be61bc4"
+  name   = "main-${var.env}"
+  org_id = "6071c090caec8b594be61bc4"
 }
 
-resource "mongodbatlas_cluster" "cluster-main" {
+resource "mongodbatlas_cluster" "main" {
   project_id = mongodbatlas_project.main.id
   name       = "main-${var.env}"
 
@@ -54,4 +54,21 @@ resource "mongodbatlas_cluster" "cluster-main" {
   backing_provider_name       = "AWS"
   provider_region_name        = "US_EAST_1"
   provider_instance_size_name = "M0"
+}
+
+resource "mongodbatlas_database_user" "main" {
+  username           = var.username
+  password           = var.password
+  project_id         = mongodbatlas_project.main.id
+  auth_database_name = "admin"
+
+  roles {
+    role_name     = "readWriteAnyDatabase"
+    database_name = "admin"
+  }
+}
+
+resource "mongodbatlas_project_ip_access_list" "main" {
+  project_id = mongodbatlas_project.main.id
+  cidr_block = "0.0.0.0/0"
 }

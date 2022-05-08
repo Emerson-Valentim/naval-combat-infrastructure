@@ -10,6 +10,8 @@ output "redis" {
 
 output "mongodb" {
   value = {
-    host = mongodbatlas_cluster.cluster-main.connection_strings[0].standard
+    host     = mongodbatlas_cluster.main.connection_strings[0].standard_srv
+    username = var.username
+    password = var.password
   }
 }

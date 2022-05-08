@@ -19,3 +19,13 @@ variable "region" {
   type    = string
   default = "sa-east-1"
 }
+
+variable "username" {
+  type    = string
+  default = "main-username"
+}
+
+variable "password" {
+  type    = string
+  default = "main-password"
+}
