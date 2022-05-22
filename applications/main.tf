@@ -38,5 +38,6 @@ module "naval-combat" {
   ecr     = module.storage.main-ecr
   redis   = module.storage.redis
   mongodb = module.storage.mongodb
+  s3      = module.storage.s3
   dns     = module.dns
 }

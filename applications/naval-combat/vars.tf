@@ -42,3 +42,8 @@ variable "dns" {
   type    = any
   default = {}
 }
+
+variable "s3" {
+  type    = any
+  default = {}
+}

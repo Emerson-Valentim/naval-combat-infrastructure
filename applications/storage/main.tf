@@ -72,3 +72,32 @@ resource "mongodbatlas_project_ip_access_list" "main" {
   project_id = mongodbatlas_project.main.id
   cidr_block = "0.0.0.0/0"
 }
+
+locals {
+  s3_skin  = "evs-skins"
+  s3_react = "evs-react"
+}
+
+module "s3_skin" {
+  source = "terraform-aws-modules/s3-bucket/aws"
+
+  bucket = local.s3_skin
+  acl    = "private"
+
+  # Allow deletion of non-empty bucket
+  force_destroy = true
+
+  attach_elb_log_delivery_policy = true
+}
+
+module "s3_react" {
+  source = "terraform-aws-modules/s3-bucket/aws"
+
+  bucket = local.s3_react
+  acl    = "private"
+
+  # Allow deletion of non-empty bucket
+  force_destroy = true
+
+  attach_elb_log_delivery_policy = true
+}

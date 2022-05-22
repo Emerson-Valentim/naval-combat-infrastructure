@@ -15,3 +15,10 @@ output "mongodb" {
     password = var.password
   }
 }
+
+output "s3" {
+  value = {
+    skin  = local.s3_skin
+    react = module.s3_react
+  }
+}
