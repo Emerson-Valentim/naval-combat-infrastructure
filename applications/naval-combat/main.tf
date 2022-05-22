@@ -8,6 +8,8 @@ locals {
 
   api_env_vars = {
     SOCKET_HOST = module.notification.domain
+    SOCKET_PORT = 443
+    SKIN_BUCKET = var.s3.skin
   }
 
   notification_env_vars = {
@@ -74,4 +76,12 @@ module "notification" {
   env_vars = merge(local.default_env_vars, local.notification_env_vars)
 
   ecr_url = var.ecr.repository_url
+}
+
+module "frontend" {
+  source = "../../modules/frontend"
+
+  service = var.service
+  bucket  = var.s3.react
+  dns     = var.dns
 }
